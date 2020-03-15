@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'quiz_brain.dart';
 
 QuizBrain quizBrain = new QuizBrain();
@@ -29,14 +30,46 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
-//  List<String> questions = [
-//    'You can lead me but not yourself.',
-//    'Approximately one quarter of human bones are in the feet.',
-//    'A slug\'s blood is green.'
-//  ];
-//  List<bool> answers = [false, true, true];
 
-  int questionNo = 0;
+  void checkAnswer(bool userAnswer) {
+    bool correctAnswer = quizBrain.getCorrectAnswer();
+    if (correctAnswer == true) {
+      scoreKeeper.add(Icon(
+        Icons.check,
+        color: Colors.green,
+      ));
+    } else {
+      scoreKeeper.add(Icon(
+        Icons.close,
+        color: Colors.red,
+      ));
+    }
+    setState(() {
+      print(quizBrain.checkEnd().toString()+' end is reached');
+      if (quizBrain.checkEnd()) {
+        Alert(
+            context: context,
+            type: AlertType.info,
+            title: 'Quiz Completed',
+            desc: 'The quiz was successfully completed',
+            buttons: [
+              DialogButton(
+                child: Text(
+                  'RESET',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                radius: BorderRadius.circular(4.0),
+                onPressed: () {
+                  quizBrain.resetQuiz();
+                  scoreKeeper.clear();
+                  Navigator.pop(context);
+                },
+              )
+            ]).show();
+      }
+      quizBrain.nextQuestion();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +83,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                quizBrain.questionBank.elementAt(questionNo).question,
+                quizBrain.getQuestion(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -74,25 +107,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer =
-                    quizBrain.questionBank.elementAt(questionNo).answer;
-                setState(() {
-                  if (correctAnswer == true) {
-                    scoreKeeper.add(Icon(
-                      Icons.check,
-                      color: Colors.green,
-                    ));
-                  } else {
-                    scoreKeeper.add(Icon(
-                      Icons.close,
-                      color: Colors.red,
-                    ));
-                  }
-                  if (questionNo < quizBrain.questionBank.length - 1)
-                    questionNo++;
-                  print(questionNo);
-                });
-                //The user picked true.
+                checkAnswer(true);
               },
             ),
           ),
@@ -110,25 +125,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer =
-                    quizBrain.questionBank.elementAt(questionNo).answer;
-                setState(() {
-                  if (correctAnswer == false) {
-                    scoreKeeper.add(Icon(
-                      Icons.check,
-                      color: Colors.green,
-                    ));
-                  } else {
-                    scoreKeeper.add(Icon(
-                      Icons.close,
-                      color: Colors.red,
-                    ));
-                  }
-                  if (questionNo < quizBrain.questionBank.length - 1)
-                    questionNo++;
-                  print(questionNo);
-                });
-                //The user picked false.
+                checkAnswer(false);
               },
             ),
           ),
