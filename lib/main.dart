@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'quiz_brain.dart';
+
+QuizBrain quizBrain = new QuizBrain();
 
 void main() => runApp(Quizzler());
 
@@ -26,12 +29,13 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
-  List<String> questions = [
-    'You can lead me but not yourself.',
-    'Approximately one quarter of human bones are in the feet.',
-    'A slug\'s blood is green.'
-  ];
-  List<bool> answers = [false, true, true];
+//  List<String> questions = [
+//    'You can lead me but not yourself.',
+//    'Approximately one quarter of human bones are in the feet.',
+//    'A slug\'s blood is green.'
+//  ];
+//  List<bool> answers = [false, true, true];
+
   int questionNo = 0;
 
   @override
@@ -46,7 +50,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions.elementAt(questionNo),
+                quizBrain.questionBank.elementAt(questionNo).question,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -70,7 +74,8 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer = answers.elementAt(questionNo);
+                bool correctAnswer =
+                    quizBrain.questionBank.elementAt(questionNo).answer;
                 setState(() {
                   if (correctAnswer == true) {
                     scoreKeeper.add(Icon(
@@ -83,7 +88,8 @@ class _QuizPageState extends State<QuizPage> {
                       color: Colors.red,
                     ));
                   }
-                  if (questionNo < questions.length-1) questionNo++;
+                  if (questionNo < quizBrain.questionBank.length - 1)
+                    questionNo++;
                   print(questionNo);
                 });
                 //The user picked true.
@@ -104,7 +110,8 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer = answers.elementAt(questionNo);
+                bool correctAnswer =
+                    quizBrain.questionBank.elementAt(questionNo).answer;
                 setState(() {
                   if (correctAnswer == false) {
                     scoreKeeper.add(Icon(
@@ -117,7 +124,8 @@ class _QuizPageState extends State<QuizPage> {
                       color: Colors.red,
                     ));
                   }
-                  if (questionNo < questions.length-1) questionNo++;
+                  if (questionNo < quizBrain.questionBank.length - 1)
+                    questionNo++;
                   print(questionNo);
                 });
                 //The user picked false.
