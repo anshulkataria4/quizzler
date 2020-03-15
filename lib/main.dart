@@ -45,7 +45,6 @@ class _QuizPageState extends State<QuizPage> {
       ));
     }
     setState(() {
-      print(quizBrain.checkEnd().toString()+' end is reached');
       if (quizBrain.checkEnd()) {
         Alert(
             context: context,
@@ -61,7 +60,7 @@ class _QuizPageState extends State<QuizPage> {
                 radius: BorderRadius.circular(4.0),
                 onPressed: () {
                   quizBrain.resetQuiz();
-                  scoreKeeper.clear();
+                  scoreKeeper = [];
                   Navigator.pop(context);
                 },
               )
